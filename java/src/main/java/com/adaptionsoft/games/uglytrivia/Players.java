@@ -1,33 +1,42 @@
 package com.adaptionsoft.games.uglytrivia;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+
+class Player {
+    String name;
+    int boardPosition;
+    int amountOfCoins;
+    boolean inPenaltyBox;
+
+    public Player(String name) {
+        this.name = name;
+        boardPosition = 0;
+        amountOfCoins = 0;
+        inPenaltyBox = false;
+    }
+}
 
 public class Players {
+    LinkedList<Player> playersList = new LinkedList<>();
     ArrayList<String> players = new ArrayList<>();
-    int[] places = new int[6];
-    int[] purses = new int[6];
+    int[] amountOfCoins = new int[6];
     boolean[] inPenaltyBox = new boolean[6];
     int currentPlayer = 0;
+
 
     private ArrayList<String> getPlayers() {
         return players;
     }
 
-    private int[] getPlaces() {
-        return places;
-    }
-
-    private int[] getPurses() {
-        return purses;
+    private int[] getAmountOfCoins() {
+        return amountOfCoins;
     }
 
     private boolean[] getInPenaltyBox() {
         return inPenaltyBox;
     }
-
-    public Players() {
-    }
-
 
     boolean isInPenaltyBox() {
         return getInPenaltyBox()[currentPlayer];
@@ -38,25 +47,33 @@ public class Players {
     }
 
     void movePlayerByRoll(int roll) {
-        getPlaces()[currentPlayer] = getPlaces()[currentPlayer] + roll;
+        setPlayerPosition(roll);
+    }
+
+    private void setPlayerPosition(int roll) {
+        playersList.get(currentPlayer).boardPosition += roll;
     }
 
     void wrapAroundPlayer() {
-        if (getPlaces()[currentPlayer] > 11) {
-            getPlaces()[currentPlayer] = getPlaces()[currentPlayer] - 12;
+        if (getPositionOfCurrentPlayer() > 11) {
+            setPlayerPosition(-12);
         }
     }
 
+    private int getPositionOfCurrentPlayer() {
+        return playersList.get(currentPlayer).boardPosition;
+    }
+
     int getCurrentPlayerPlace() {
-        return getPlaces()[currentPlayer];
+        return getPositionOfCurrentPlayer();
     }
 
     int getPurseAmount() {
-        return getPurses()[currentPlayer];
+        return getAmountOfCoins()[currentPlayer];
     }
 
     int gainCoin() {
-        return getPurses()[currentPlayer]++;
+        return getAmountOfCoins()[currentPlayer]++;
     }
 
     void penalizePlayer() {
@@ -68,7 +85,6 @@ public class Players {
     }
 
     void nextPlayer() {
-        //todo: change to linkedlist
         currentPlayer++;
         if (currentPlayer == getPlayers().size()) {
             currentPlayer = 0;
@@ -76,9 +92,9 @@ public class Players {
     }
 
     void addPlayer(String playerName) {
+        playersList.add(new Player(playerName));
         getPlayers().add(playerName);
-        getPlaces()[howManyPlayers()] = 0;
-        getPurses()[howManyPlayers()] = 0;
+        getAmountOfCoins()[howManyPlayers()] = 0;
         getInPenaltyBox()[howManyPlayers()] = false;
     }
 
