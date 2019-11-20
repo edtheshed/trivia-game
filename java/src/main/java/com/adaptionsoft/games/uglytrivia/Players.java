@@ -1,64 +1,25 @@
 package com.adaptionsoft.games.uglytrivia;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
-
-class Player {
-    String name;
-    int boardPosition;
-    int amountOfCoins;
-    boolean inPenaltyBox;
-
-    public Player(String name) {
-        this.name = name;
-        boardPosition = 0;
-        amountOfCoins = 0;
-        inPenaltyBox = false;
-    }
-}
 
 public class Players {
     LinkedList<Player> playersList = new LinkedList<>();
-    ArrayList<String> players = new ArrayList<>();
-    int[] amountOfCoins = new int[6];
-    boolean[] inPenaltyBox = new boolean[6];
     int currentPlayer = 0;
 
 
-    private ArrayList<String> getPlayers() {
-        return players;
-    }
-
-    private int[] getAmountOfCoins() {
-        return amountOfCoins;
-    }
-
-    private boolean[] getInPenaltyBox() {
-        return inPenaltyBox;
-    }
-
     boolean isInPenaltyBox() {
-        return getInPenaltyBox()[currentPlayer];
+        return playersList.get(currentPlayer).inPenaltyBox;
     }
 
-    Object getPlayerName() {
-        return getPlayers().get(currentPlayer);
+    String getPlayerName() {
+        return playersList.get(currentPlayer).name;
     }
 
-    void movePlayerByRoll(int roll) {
-        setPlayerPosition(roll);
+    void movePlayerBy(int amount) {
+        Player player = playersList.get(currentPlayer);
+        player.move(amount);
     }
 
-    private void setPlayerPosition(int roll) {
-        playersList.get(currentPlayer).boardPosition += roll;
-    }
-
-    void wrapAroundPlayer() {
-        if (getPositionOfCurrentPlayer() > 11) {
-            setPlayerPosition(-12);
-        }
-    }
 
     private int getPositionOfCurrentPlayer() {
         return playersList.get(currentPlayer).boardPosition;
@@ -69,15 +30,15 @@ public class Players {
     }
 
     int getPurseAmount() {
-        return getAmountOfCoins()[currentPlayer];
+        return playersList.get(currentPlayer).amountOfCoins;
     }
 
     int gainCoin() {
-        return getAmountOfCoins()[currentPlayer]++;
+        return playersList.get(currentPlayer).amountOfCoins++;
     }
 
     void penalizePlayer() {
-        getInPenaltyBox()[currentPlayer] = true;
+        playersList.get(currentPlayer).inPenaltyBox = true;
     }
 
     boolean didPlayerWin() {
@@ -86,19 +47,16 @@ public class Players {
 
     void nextPlayer() {
         currentPlayer++;
-        if (currentPlayer == getPlayers().size()) {
+        if (currentPlayer == playersList.size()) {
             currentPlayer = 0;
         }
     }
 
     void addPlayer(String playerName) {
         playersList.add(new Player(playerName));
-        getPlayers().add(playerName);
-        getAmountOfCoins()[howManyPlayers()] = 0;
-        getInPenaltyBox()[howManyPlayers()] = false;
     }
 
     public int howManyPlayers() {
-return getPlayers().size();
+return playersList.size();
 }
 }

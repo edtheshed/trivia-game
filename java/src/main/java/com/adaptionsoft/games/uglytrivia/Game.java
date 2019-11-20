@@ -47,8 +47,7 @@ public class Game {
                 isGettingOutOfPenaltyBox = true;
 
 				print(players.getPlayerName() + " is getting out of the penalty box");
-				players.movePlayerByRoll(roll);
-                players.wrapAroundPlayer();
+				players.movePlayerBy(roll);
 
                 System.out.println(players.getPlayerName()
                         + "'s new location is "
@@ -62,8 +61,7 @@ public class Game {
 
         } else {
 
-            players.movePlayerByRoll(roll);
-            players.wrapAroundPlayer();
+            players.movePlayerBy(roll);
 
             System.out.println(players.getPlayerName()
                     + "'s new location is "
